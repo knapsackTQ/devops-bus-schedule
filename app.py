@@ -2,28 +2,60 @@ from flask import Flask, jsonify
 
 app = Flask(__name__)
 
-# Modern CSS styling
-CSS = """
-<style>
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f4f8; color: #333; text-align: center; padding: 50px; }
-    h1 { color: #2c3e50; font-size: 2.5em; margin-bottom: 10px; }
-    h2 { color: #34495e; }
-    .container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); max-width: 650px; margin: auto; }
-    ul { list-style-type: none; padding: 0; }
-    li { background: #e1e8ed; margin: 12px 0; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 1.1em; color: #2c3e50; }
-    a { text-decoration: none; color: #fff; background-color: #3498db; padding: 10px 20px; border-radius: 6px; font-weight: bold; margin-top: 20px; display: inline-block; transition: 0.3s; }
-    a:hover { background-color: #2980b9; }
-    .subtitle { color: #7f8c8d; font-size: 1.2em; margin-bottom: 30px; }
-</style>
-"""
+def get_html(page_title, body_content):
+    return f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>{page_title}</title>
+        <style>
+            body {{ font-family: 'Segoe UI', system-ui, sans-serif; background-color: #0f172a; color: #f8fafc; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }}
+            .card {{ background-color: #1e293b; padding: 40px; border-radius: 16px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); border: 1px solid #334155; max-width: 600px; width: 90%; text-align: center; }}
+            h1 {{ color: #38bdf8; font-size: 26px; margin-top: 0; }}
+            .status-badge {{ display: inline-block; background: #064e3b; color: #34d399; padding: 6px 12px; border-radius: 9999px; font-size: 14px; font-weight: bold; margin-bottom: 20px; border: 1px solid #059669; }}
+            .route-box {{ background: #0f172a; border-left: 4px solid #38bdf8; padding: 16px; margin: 15px 0; border-radius: 6px; text-align: left; font-size: 16px; }}
+            .route-box strong {{ color: #7dd3fc; display: block; margin-bottom: 4px; }}
+            .btn {{ display: inline-block; background-color: #0284c7; color: white; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; margin-top: 20px; transition: 0.2s; border: none; cursor: pointer; }}
+            .btn:hover {{ background-color: #0369a1; transform: translateY(-2px); }}
+            .footer {{ margin-top: 30px; font-size: 13px; color: #64748b; border-top: 1px solid #334155; padding-top: 15px; }}
+        </style>
+    </head>
+    <body>
+        <div class="card">
+            {body_content}
+            <div class="footer">Developed by Tanishq Dinesh Jadhav</div>
+        </div>
+    </body>
+    </html>
+    """
 
 @app.route("/")
 def home():
-    return f"{CSS}<div class='container'><h1>Welcome to the College Bus Schedule Viewer!</h1><p class='subtitle'>Your smart transit companion. Next bus arrives in 10 minutes.</p><a href='/routes'>View Bus Routes</a></div>"
+    content = """
+        <div class="status-badge">🟢 Live System Active</div>
+        <h1>Welcome to the Saraswati College Transit Portal</h1>
+        <p style="color: #94a3b8; line-height: 1.6; margin-bottom: 30px;">
+            Real-time automated routing system. The next scheduled departure is arriving in exactly 10 minutes.
+        </p>
+        <a href="/routes" class="btn">View Bus Routes</a>
+    """
+    return get_html("Transit Home", content)
 
 @app.route("/routes")
 def routes():
-    return f"{CSS}<div class='container'><h2>Bus Routes</h2><ul><li>🚍 Route A: Main Gate to Hostel (8:00 AM)</li><li>🚍 Route B: Library to Station (5:00 PM)</li></ul><a href='/'>Back to Home</a></div>"
+    content = """
+        <h1>Active Bus Routes</h1>
+        <div class="route-box">
+            <strong>Route A: Morning Express</strong>
+            Kharghar Station to Saraswati Campus (8:00 AM)
+        </div>
+        <div class="route-box">
+            <strong>Route B: Evening Return</strong>
+            Saraswati Campus to Thane East (5:00 PM)
+        </div>
+        <a href="/" class="btn" style="background-color: #475569;">Return Home</a>
+    """
+    return get_html("Live Routes", content)
 
 @app.route("/health")
 def health():
